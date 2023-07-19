@@ -25,8 +25,8 @@ public class PlayerShip : MonoBehaviour
         
         Vector3 currentPos = transform.position;
 
-        currentPos.x += input.x * speed;
-        currentPos.y += input.y * speed;
+        currentPos.x += input.x * speed * Time.deltaTime;
+        currentPos.y += input.y * speed * Time.deltaTime;
 
         if (currentPos.x < -wallDistanceX)
             currentPos.x = -wallDistanceX;
