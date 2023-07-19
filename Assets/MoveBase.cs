@@ -16,7 +16,7 @@ public class MoveBase : MonoBehaviour
 
         Vector3 currentPosH = transform.position;
 
-        float move = RigtLeftValue * speed;
+        float move = RigtLeftValue * speed * Time.deltaTime;
 
         currentPosH.x += move;
 
@@ -38,7 +38,7 @@ public class MoveBase : MonoBehaviour
 
         Vector3 currentPosV = transform.position;
 
-        float movement = UpDownValue * speed;
+        float movement = UpDownValue * speed * Time.deltaTime;
 
         currentPosV.y += movement;
 
