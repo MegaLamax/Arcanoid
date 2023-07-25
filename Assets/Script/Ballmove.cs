@@ -4,52 +4,78 @@ using UnityEngine;
 
 public class Ballmove : MonoBehaviour
 {
+    public float Speed = 2f;
 
-    //public float forceMagnitude = 5f;
-    public float Speed = 5f;
-    public float Max = 3f;
-    public float Min = 1f;
+    public float WallLimitX;
+    public float WallLimitY;
 
-    private Vector2 DirectionMove;
-    private float NextMoveTime;
+    public Vector3 InitalDirectionMove;
+    private Vector3 CurrentDirectionMove;
 
-    //private Rigidbody2D rb;
+    public float Radius = 0.2f;
 
-    // Start is called before the first frame update
+    public PlayerShip playerShip;
+    
     void Start()
     {
-        NextMoveTime = Time.time + Random.Range(Min,Max);
-        MoveDirectionBall();
-        //rb = GetComponent<Rigidbody2D>();
-        //MoveBall();
+
+        CurrentDirectionMove = InitalDirectionMove;
 
     }
+    
+    void Update()
+    {
+
+        MoveDirectionBall();
+
+    }
+
 
     private void MoveDirectionBall()
     {
-        float randomAngle = Random.Range(0f, 360f);
-        DirectionMove = new Vector2(Mathf.Cos(randomAngle * Mathf.Deg2Rad), Mathf.Sin(randomAngle * Mathf.Deg2Rad));
-    }
-    //private void MoveBall()
-    //{
-    //    Vector2 randomForce = Random.insideUnitCircle * forceMagnitude * Time.deltaTime;
-    //    rb.AddForce(randomForce, ForceMode2D.Impulse);
+        CurrentDirectionMove.Normalize();
 
-    //    float interval = Random.Range(Min, Max);
+        Vector3 movement = CurrentDirectionMove * Speed * Time.deltaTime;
 
-    //    Invoke("MoveBall",interval);
+        Vector3 newPosition = transform.position + movement;
 
-    //}
+        newPosition.x = Mathf.Clamp(newPosition.x, -WallLimitX, WallLimitX);
 
-    // Update is called once per frame
-    void Update()
-    {
-        if (Time.time>=NextMoveTime)
+        if (newPosition.y + Radius >= WallLimitY)
         {
-            MoveDirectionBall();
-            NextMoveTime = Time.time + Random.Range(Min, Max);
+            newPosition.y = WallLimitY - Radius;
+            CurrentDirectionMove.y *= -1f;
         }
 
-        transform.Translate(DirectionMove * Speed * Time.deltaTime);
+        if (newPosition.y - Radius <= -WallLimitY)
+        {
+            newPosition.y = -WallLimitY + Radius;
+            CurrentDirectionMove.y *= -1f;
+        }
+
+        if (newPosition.x + Radius >= WallLimitX)
+        {
+            newPosition.x = WallLimitX - Radius;
+            CurrentDirectionMove.x *= -1f;
+        }
+
+        if (newPosition.x - Radius <= -WallLimitX)
+        {
+            newPosition.x = -WallLimitX + Radius;
+            CurrentDirectionMove.x *= -1f;
+        }
+
+        
+        Vector3 ToPlayerShip = playerShip.transform.position - newPosition;
+
+        float DistancePlayerShip = ToPlayerShip.magnitude;
+
+        if (DistancePlayerShip<=Radius+ playerShip.Side)
+        {
+            CurrentDirectionMove = ToPlayerShip.normalized;
+        }
+
+        transform.position = newPosition;
     }
+
 }

@@ -4,12 +4,11 @@ using UnityEngine;
 
 public class PlayerShip : MonoBehaviour
 {
-    public float speed = 3f  ;
-    public float wallDistanceX = 7f;
-    public float wallDistanceY = 4f;
+    public float speed = 3f;
+    public float Side = 0.5f;
+    public float wallDistanceX;
+    //public float wallDistanceY;
     public int frameRate;
-
-    private Vector3 _lastFramePosition;
     
     private void Start()
     {
@@ -21,7 +20,7 @@ public class PlayerShip : MonoBehaviour
     {
         Vector2 input = new Vector2();
         input.x = Input.GetAxis("Horizontal");
-        input.y = Input.GetAxis("Vertical");
+        //input.y = Input.GetAxis("Vertical");
 
         Vector2 inputV = input.normalized;
         
@@ -31,37 +30,20 @@ public class PlayerShip : MonoBehaviour
 
         currentPos.x = Mathf.Clamp(currentPos.x, -wallDistanceX, wallDistanceX);
 
-        currentPos.y = Mathf.Clamp(currentPos.y, -wallDistanceY, wallDistanceY);
+        if (currentPos.x + Side >= wallDistanceX)
         {
-            //Vector3 inputNormal = new Vector3(input.x, input.y, 0f).normalized;
-
-            //Vector3 currentPos = transform.position;
-
-            //currentPos.x += input.x * speed * Time.deltaTime;
-            //currentPos.y += input.y * speed * Time.deltaTime;
-
-            //if (currentPos.x < -wallDistanceX)
-            //    currentPos.x = -wallDistanceX;
-
-            //if (currentPos.x > wallDistanceX)
-            //    currentPos.x = wallDistanceX;
-
-            //if (currentPos.y > wallDistanceY)
-            //    currentPos.y = wallDistanceY;
-
-            //if (currentPos.y < -wallDistanceY)
-            //    currentPos.y = -wallDistanceY;
+            currentPos.x = wallDistanceX - Side;
         }
 
+        if (currentPos.x - Side <= -wallDistanceX)
+        {
+            currentPos.x = -wallDistanceX + Side;
+        }
+        
         transform.position = currentPos;
 
-        float distanceThisFrame = Vector3.Distance(transform.position, _lastFramePosition);
+        //currentPos.y = Mathf.Clamp(currentPos.y, -wallDistanceY, wallDistanceY);
 
-        if (distanceThisFrame > 0)
-        {
-            Debug.LogError($"distance this frame: {distanceThisFrame.ToString("f3")}");    
-        }
-
-        _lastFramePosition = transform.position;
+  
     }
 }
