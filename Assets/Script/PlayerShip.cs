@@ -9,11 +9,12 @@ public class PlayerShip : MonoBehaviour
     public float wallDistanceX;
     //public float wallDistanceY;
     public int frameRate;
-    
+
     private void Start()
     {
         Application.runInBackground = true;
         Application.targetFrameRate = frameRate;
+
     }
 
     private void Update()
@@ -39,7 +40,9 @@ public class PlayerShip : MonoBehaviour
         {
             currentPos.x = -wallDistanceX + Side;
         }
+
         
+
         transform.position = currentPos;
 
         //currentPos.y = Mathf.Clamp(currentPos.y, -wallDistanceY, wallDistanceY);

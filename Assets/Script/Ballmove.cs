@@ -14,7 +14,7 @@ public class Ballmove : MonoBehaviour
 
     public float Radius = 0.2f;
 
-    public PlayerShip playerShip;
+    public PlayerShip Ship;
     
     void Start()
     {
@@ -28,6 +28,7 @@ public class Ballmove : MonoBehaviour
 
         MoveDirectionBall();
 
+        
     }
 
 
@@ -59,23 +60,8 @@ public class Ballmove : MonoBehaviour
             CurrentDirectionMove.x *= -1f;
         }
 
-        if (newPosition.x - Radius <= -WallLimitX)
-        {
-            newPosition.x = -WallLimitX + Radius;
-            CurrentDirectionMove.x *= -1f;
-        }
-
-        
-        Vector3 ToPlayerShip = playerShip.transform.position - newPosition;
-
-        float DistancePlayerShip = ToPlayerShip.magnitude;
-
-        if (DistancePlayerShip<=Radius+ playerShip.Side)
-        {
-            CurrentDirectionMove = ToPlayerShip.normalized;
-        }
-
         transform.position = newPosition;
     }
 
+    
 }
